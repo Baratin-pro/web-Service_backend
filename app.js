@@ -1,10 +1,9 @@
-require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const path = require('path');
 const app = express();
-
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 app.use(helmet());
 
 mongoose
