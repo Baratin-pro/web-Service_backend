@@ -35,3 +35,29 @@ exports.signup = async (req, res) => {
     return res.status(500).json(e);
   }
 };
+
+exports.login = async (req, res) => {
+  try {
+    const isValid = schema.login.validateAsync(req.body);
+    if (!isValid) {
+      return res.status(400).json({ message: 'Incorrect entry' });
+    }
+
+    const userDb = await db.user.findOne({ email: req.body.email });
+    if (!userDb) {
+      return res.status(404).json({ message: 'Email or password invalid' });
+    }
+
+    const passwordValid = bcrypt.compareSync(req.body.password, userDb.password);
+    if (!passwordValid) {
+      return res.status(404).json({ message: 'Email or password invalid' });
+    }
+    res.status(200).json({
+      token: jwt.sign({ userId: userDb._id }, process.env.TOKEN_SECRET, {
+        expiresIn: '24h',
+      }),
+    });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
+};
