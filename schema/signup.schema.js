@@ -8,5 +8,5 @@ module.exports = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'fr'] } })
     .max(100),
   password: Joi.string().required(),
-  pseudo: Joi.string().required(),
+  username: Joi.string().required().alphanum().max(80),
 });

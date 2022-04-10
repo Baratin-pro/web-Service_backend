@@ -19,9 +19,10 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const isExiting = await db.user.findOne({ email: req.body.email });
-    if (isExiting) {
-      return res.status(400).json({ message: 'Email already used' });
+    const emailDb = await db.user.findOne({ email: req.body.email });
+    const username = await db.user.findOne({ username: req.body.username });
+    if (emailDb || username) {
+      return res.status(400).json({ message: 'Email or username already used' });
     }
 
     const user = new db.user(req.body);
