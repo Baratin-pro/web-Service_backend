@@ -35,4 +35,5 @@ app.use(express.urlencoded({ extended: true }));
 require('./routes/user.routes')(app);
 require('./routes/movieGenre.routes')(app);
 require('./routes/tvGenre.routes')(app);
+require('./routes/tv.routes')(app);
 module.exports = app;
