@@ -32,6 +32,15 @@ exports.sourceLikeOrFavory = async (req, res) => {
   }
 };
 
+exports.getBySourceId = async (req, res) => {
+  try {
+    const source = await db.source.findOne({ sourceId: req.params.sourceId });
+    return res.status(200).json(source);
+  } catch (e) {
+    return res.status(500).json(e);
+  }
+};
+
 async function createSource(reqSource) {
   const source = new db.source(reqSource);
   return await source.save();
