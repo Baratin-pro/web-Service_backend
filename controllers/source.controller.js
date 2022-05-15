@@ -21,7 +21,7 @@ exports.sourceLikeOrFavory = async (req, res) => {
       source = await createSource(reqBody);
     }
     if (req.body.like !== undefined) {
-      source = await sourceOptionUpdate(source, 'likes', req.body.like, userId);
+      source = await sourceOptionUpdate(source, 'like', req.body.like, userId);
     }
     if (req.body.favory !== undefined) {
       source = await sourceOptionUpdate(source, 'favory', req.body.favory, userId);
@@ -35,6 +35,15 @@ exports.sourceLikeOrFavory = async (req, res) => {
 exports.getBySourceId = async (req, res) => {
   try {
     const source = await db.source.findOne({ sourceId: req.params.sourceId });
+    return res.status(200).json(source);
+  } catch (e) {
+    return res.status(500).json(e);
+  }
+};
+
+exports.getFavoritesByUser = async (req, res) => {
+  try {
+    const source = await db.source.find({ usersFavorites: [req.user.userId] });
     return res.status(200).json(source);
   } catch (e) {
     return res.status(500).json(e);
@@ -65,7 +74,7 @@ async function getByIdApi(type, id) {
 
 async function sourceOptionUpdate(source, typeOption, optionUpdate, userId) {
   switch (typeOption) {
-    case 'likes':
+    case 'like':
       if (optionUpdate === '1' && source.usersLiked.includes(userId) !== true) {
         await db.source.updateOne(
           { _id: source._id },

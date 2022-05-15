@@ -8,6 +8,7 @@ const auth = require('../middleware/auth');
 module.exports = (app) => {
   router.post('/:sourceId', auth, sourceCtrl.sourceLikeOrFavory);
   router.get('/:sourceId', auth, sourceCtrl.getBySourceId);
+  router.get('/', auth, sourceCtrl.getFavoritesByUser);
 
   app.use('/api/source', router);
 };
